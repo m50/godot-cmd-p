@@ -103,7 +103,7 @@ func _on_text_entered(search):
 
 func _similarity_sort(a, b):
 	var s = search_text.replace("*", "")
-	if s.is_subsequence_ofi(a):
+	if s.is_subsequence_ofi(a) and not s.is_subsequence_ofi(b):
 		return true
 
 	var asim = a.similarity(s)
