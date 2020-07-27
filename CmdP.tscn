@@ -63,6 +63,8 @@ margin_right = 961.405
 margin_bottom = 1080.0
 rect_scale = Vector2( 3, 3 )
 rect_pivot_offset = Vector2( 960, 0 )
+size_flags_horizontal = 15
+size_flags_vertical = 15
 theme = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -74,7 +76,9 @@ anchor_right = 0.5
 margin_left = -300.0
 margin_top = 100.0
 margin_right = 300.0
-margin_bottom = 337.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -84,7 +88,9 @@ __meta__ = {
 margin_left = 1.0
 margin_top = 1.0
 margin_right = 599.0
-margin_bottom = 246.0
+margin_bottom = 46.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Search" type="LineEdit" parent="PanelContainer/Organizer"]
 margin_right = 597.0
@@ -95,8 +101,12 @@ caret_blink = true
 [node name="Entries" type="ScrollContainer" parent="PanelContainer/Organizer"]
 margin_top = 45.0
 margin_right = 597.0
-margin_bottom = 245.0
-rect_min_size = Vector2( 0, 200 )
+margin_bottom = 45.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="List" type="VBoxContainer" parent="PanelContainer/Organizer/Entries"]
+margin_right = 597.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

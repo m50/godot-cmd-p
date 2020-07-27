@@ -1,6 +1,7 @@
 tool
 extends EditorPlugin
 
+const EXPAND_AMT = 25
 const file_search = "ui_file_search"
 const scene = preload("res://addons/CmdP/CmdP.tscn")
 const listEntryScene = preload("res://addons/CmdP/ListEntry.tscn")
@@ -54,7 +55,7 @@ func _input(event):
 
 	var children: Array = entries.get_children();
 	var selnext = false;
-	if event.is_action_pressed("ui_up"):
+	if event.is_action("ui_up"):
 		children.invert()
 		for c in children:
 			if selnext:
@@ -62,7 +63,7 @@ func _input(event):
 				return
 			if c.text == search_val:
 				selnext = true
-	elif event.is_action_pressed("ui_down"):
+	elif event.is_action("ui_down"):
 		for c in children:
 			if selnext:
 				select_entry(c)
@@ -78,7 +79,6 @@ func _on_text_changed(new_text: String):
 	search_text = "*%s*" % insert_between_every_char(new_text, "*").to_lower()
 	if new_text.length() == 0:
 		search_text = ""
-	print(search_text)
 
 	var search_arr = []
 	for p in paths:
@@ -86,12 +86,10 @@ func _on_text_changed(new_text: String):
 			search_arr.append(p)
 
 	search_val = ""
-	if search_arr.size() > 2:
-		search_arr.sort_custom(self, "_similarity_sort")
+	search_arr.sort_custom(self, "_similarity_sort")
 	if search_arr.size() > 0:
 		search_val = search_arr[0]
 
-	print(search_val)
 	clear_entries()
 	for s in search_arr:
 		add_entry(s)
@@ -107,18 +105,11 @@ func _similarity_sort(a, b):
 	var s = search_text.replace("*", "")
 	if s.is_subsequence_ofi(a):
 		return true
-	elif s.is_subsequence_ofi(b):
-		return false
-
-	if a.find(s) >= 0:
-		return true
-	elif b.find(s) >= 0:
-		return false
 
 	var asim = a.similarity(s)
 	var bsim = b.similarity(s)
 
-	return asim >= bsim
+	return asim > bsim
 
 func search_dirs(dir: EditorFileSystemDirectory):
 	for idx in dir.get_subdir_count():
@@ -133,6 +124,7 @@ func search_dirs(dir: EditorFileSystemDirectory):
 func clear_entries():
 	for c in entries.get_children():
 		c.free()
+	interface.get_child(0).rect_size.y = 47
 
 func add_entry(text: String):
 	var l = listEntryScene.instance()
@@ -141,6 +133,8 @@ func add_entry(text: String):
 	unselect_entry(l)
 	if l.text == search_val:
 		select_entry(l)
+	if interface.get_child(0).rect_size.y < 300:
+		interface.get_child(0).rect_size.y += EXPAND_AMT
 	return l
 
 func insert_between_every_char(text, chr) -> String:
@@ -157,7 +151,6 @@ func select_entry(entry: Label):
 		return
 	entry.get_node("Highlight").visible = true
 	search_val = entry.text
-	print("Selected: ", search_val)
 	unselect_entry(cur_sel_label)
 	cur_sel_label = entry
 
