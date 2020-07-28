@@ -10,6 +10,8 @@ var cur_sel_label
 var search_text = ""
 var search_val = ""
 var paths = []
+var up_pressed = false;
+var down_pressed = false;
 
 var interface
 var entries
@@ -55,18 +57,32 @@ func _input(event):
 
 	var children: Array = entries.get_children();
 	var selnext = false;
-	if event.is_action("ui_up"):
+	if event.is_action_released("ui_up"):
+		up_pressed = false;
+		return;
+	elif event.is_action_released("ui_down"):
+		down_pressed = false;
+		return
+	if event.is_action_pressed("ui_up") or (up_pressed and event.is_action("ui_up")):
+		(entries.get_parent() as ScrollContainer).scroll_vertical -= EXPAND_AMT / 2
+		search.grab_focus()
+		search.set_deferred("caret_position", len(search.text))
 		children.invert()
 		for c in children:
 			if selnext:
 				select_entry(c)
+				set_deferred("up_pressed", true)
 				return
 			if c.text == search_val:
 				selnext = true
-	elif event.is_action("ui_down"):
+	elif event.is_action_pressed("ui_down") or (down_pressed and event.is_action("ui_down")):
+		(entries.get_parent() as ScrollContainer).scroll_vertical += EXPAND_AMT / 2
+		search.grab_focus()
+		search.set_deferred("caret_position", len(search.text))
 		for c in children:
 			if selnext:
 				select_entry(c)
+				set_deferred("down_pressed", true)
 				return
 			if c.text == search_val:
 				selnext = true
@@ -125,6 +141,7 @@ func clear_entries():
 	for c in entries.get_children():
 		c.free()
 	interface.get_child(0).rect_size.y = 47
+	(entries.get_parent() as ScrollContainer).scroll_vertical = 0
 
 func add_entry(text: String):
 	var l = listEntryScene.instance()

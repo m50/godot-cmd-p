@@ -22,5 +22,4 @@ All of the hotkeys use the following input maps:
 
 ## Known Issues
 
-- When pressing the up arrow, the cursor in the search bar moves to the beginning.
-- When pressing up/down arrows, the scroll container doesn't scroll as well.
+None so far :)
