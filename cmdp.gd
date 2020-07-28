@@ -135,6 +135,7 @@ func add_entry(text: String):
 		select_entry(l)
 	if interface.get_child(0).rect_size.y < 300:
 		interface.get_child(0).rect_size.y += EXPAND_AMT
+	l.connect("pressed", self, "_on_pressed", [l])
 	return l
 
 func insert_between_every_char(text, chr) -> String:
@@ -146,7 +147,7 @@ func insert_between_every_char(text, chr) -> String:
 		result += text[i]
 	return result
 
-func select_entry(entry: Label):
+func select_entry(entry):
 	if !entry:
 		return
 	entry.get_node("Highlight").visible = true
@@ -154,7 +155,11 @@ func select_entry(entry: Label):
 	unselect_entry(cur_sel_label)
 	cur_sel_label = entry
 
-func unselect_entry(entry: Label):
+func unselect_entry(entry):
 	if !entry:
 		return
 	entry.get_node("Highlight").visible = false
+
+func _on_pressed(entry):
+	select_entry(entry)
+	_on_text_entered(entry.text)
