@@ -37,6 +37,8 @@ func _exit_tree():
 
 func _input(event):
 	if event.is_action_pressed(file_search):
+		if interface:
+			interface.queue_free();
 		interface = scene.instance();
 		search = interface.get_node("PanelContainer/Organizer/Search")
 		entries = interface.get_node("PanelContainer/Organizer/Entries/List")
